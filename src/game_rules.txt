@@ -1,0 +1,41 @@
+Game Info:
+
+#Part 1:
+Entering the game the user is provided with a menu from which he can choose to either create a new hero or use an existing one!
+
+1) Creating a new hero
+-> The user will be asked for the name of the hero and the desired class
+-> Then the user will be sent to the character menu
+
+2) Use an existing hero
+-> The user will be allowed to choose from heroes already created
+-> After choosing a hero the user will be sent to the character menu
+
+3) Game Rules
+The part you are reading now
+
+4)Exit the game -> exits the game
+
+#Part 2:
+Character menu:
+
+There are three options available for the user:
+
+1) Fight - there are two different types of a fight - a user hero vs another hero and a user hero vs a boss
+
+-> Vs Another Hero - the user can choose an enemy hero from a presented list and then the fight begins
+-> Vs Boss - the user can choose the level of the boss and then the fight begins
+
+2) Buy items - Opens a shop with different items that can be bought
+
+3) Exits the character with an option to save it before that
+
+#Part 3:
+Combat:
+
+Each class has 3 abilities that the user can choose from
+The basic attack is calculated when you subtract the enemy armor from your damage
+(The minimum damage in the game is 5 if the armor is greater than the damage the total damage is set to 5)
+The other abilities cost mana but give different useful bonuses
+
+Enjoy the game!
