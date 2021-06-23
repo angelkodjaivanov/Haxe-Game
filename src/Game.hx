@@ -16,7 +16,7 @@ class Game {
 				if (user_option == "1" || user_option == "2" || user_option == "3" || user_option == "4") {
 					break;
 				} else {
-					Sys.println("Wrong input! Enter a number between 1 and 4!");
+					Sys.println("\n### Wrong input! Enter a number between 1 and 4! ###\n");
 				}
 			} while (true);
 
@@ -42,7 +42,7 @@ class Game {
 			if (user_hero != null) {
 				characterMenu(user_hero);
 			} else {
-				Sys.println("You haven't picked a hero!");
+				Sys.println("\n### You haven't picked a hero! ###");
 				continue;
 			}
 		}
@@ -61,6 +61,20 @@ class Game {
 		do {
 			Sys.print("Enter your name: ");
 			name = Sys.stdin().readLine();
+			var ch_idx = 0;
+			var wrong_name = false;
+			while (ch_idx < name.length) {
+				if (name.charAt(ch_idx) == ' ' || name.charAt(ch_idx) == '|') {
+					Sys.println("\n### Your name could not contain ' ' or '|' ###\n");
+					wrong_name = true;
+					break;
+				}
+				ch_idx += 1;
+			}
+			if (wrong_name) {
+				continue;
+			}
+
 			var index = 0;
 			var hero_exists = false;
 			// Spliting the information from the data file and checking for same name
@@ -74,7 +88,7 @@ class Game {
 			}
 
 			if (hero_exists) {
-				Sys.println("Name already taken!");
+				Sys.println("\n### Name already taken! ###\n");
 			} else {
 				break;
 			}
@@ -87,7 +101,7 @@ class Game {
 			if (user_option == "1" || user_option == "2" || user_option == "3") {
 				break;
 			} else {
-				Sys.println("Wrong input! Enter a number between 1 and 3!");
+				Sys.println("\n### Wrong input! Enter a number between 1 and 3! ###\n");
 			}
 		} while (true);
 
@@ -109,7 +123,7 @@ class Game {
 		// Reading the data file
 		var characters = sys.io.File.getContent('data.txt').split("|||");
 		if (characters.length == 1) {
-			Sys.println("No existing characters!");
+			Sys.println("\n### No existing characters! ###\n");
 			return null;
 		}
 		characters.pop();
@@ -156,7 +170,7 @@ class Game {
 					break;
 				}
 			} else {
-				Sys.println("Wrong input!");
+				Sys.println("\n### Wrong input! ###\n");
 			}
 		} while (true);
 		return null;
@@ -176,7 +190,7 @@ class Game {
 			if (user_option == "1" || user_option == "2" || user_option == "3") {
 				break;
 			} else {
-				Sys.println("Wrong input! Enter a number between 1 and 3!");
+				Sys.println("\n### Wrong input! Enter a number between 1 and 3! ###\n");
 			}
 		} while (true);
 
@@ -207,7 +221,7 @@ class Game {
 			if (user_option == "1" || user_option == "2") {
 				break;
 			} else {
-				Sys.println("Wrong input! Enter a number between 1 and 2!");
+				Sys.println("\n### Wrong input! Enter a number between 1 and 2! ###\n");
 			}
 		} while (true);
 
@@ -218,7 +232,7 @@ class Game {
 				// Reads the enemies from the data file
 				var enemies = sys.io.File.getContent('data.txt').split("|||");
 				if (enemies.length == 1) {
-					Sys.println("No existing enemies!");
+					Sys.println("\n### No existing enemies! ###\n");
 				} else {
 					enemies.pop();
 					var index = 0;
@@ -265,7 +279,7 @@ class Game {
 								break;
 							}
 						} else {
-							Sys.println("Wrong input!");
+							Sys.println("\n### Wrong input! ###\n");
 						}
 					} while (true);
 				}
@@ -306,7 +320,7 @@ class Game {
 			if (user_option == "1" || user_option == "2" || user_option == "3" || user_option == "4" || user_option == "5") {
 				break;
 			} else {
-				Sys.println("Wrong input! Enter a number between 1 and 5!");
+				Sys.println("\n### Wrong input! Enter a number between 1 and 5! ###\n");
 			}
 		} while (true);
 
@@ -351,7 +365,7 @@ class Game {
 				if (user_option == "y" || user_option == "n") {
 					break;
 				} else {
-					Sys.println("Wrong input!");
+					Sys.println("\n### Wrong input! ###\n");
 				}
 			} while (true);
 

@@ -1,1 +1,1 @@
-Susime 5 2 115 35 55 30 Warrior|||Bezime 25 3 120 55 60 25 Ranger|||
+Susime 10 2 135 35 55 40 Warrior|||
