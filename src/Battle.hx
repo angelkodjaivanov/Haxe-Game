@@ -49,7 +49,7 @@ class Battle {
 				if (user_option == "1" || user_option == "2" || user_option == "3") {
 					break;
 				} else {
-					Sys.println("Wrong input! Enter a number between 1 and 3!");
+					Sys.println("\n### Wrong input! Enter a number between 1 and 3! ###\n");
 				}
 			} while (true);
 
@@ -66,7 +66,7 @@ class Battle {
 								player.addHealth(20 * player.getLevel());
 								player.setMana(player.getMana() - 30);
 							} else {
-								Sys.println("Not enough mana!");
+								Sys.println("\n### Not enough mana! ###\n");
 								continue;
 							}
 						case "Mage":
@@ -75,7 +75,7 @@ class Battle {
 								player.addHealth(Std.int(startingHealth / 2));
 								player.setMana(player.getMana() - 100);
 							} else {
-								Sys.println("Not enough mana!");
+								Sys.println("\n### Not enough mana! ###\n");
 								continue;
 							}
 						case "Ranger":
@@ -89,7 +89,7 @@ class Battle {
 									damage = 5;
 								}
 							} else {
-								Sys.println("Not enough mana!");
+								Sys.println("\n### Not enough mana! ###\n");
 								continue;
 							}
 					}
@@ -101,7 +101,7 @@ class Battle {
 								player.addArmor(10 * player.getLevel());
 								player.setMana(player.getMana() - 40);
 							} else {
-								Sys.println("Not enough mana!");
+								Sys.println("\n### Not enough mana! ###\n");
 								continue;
 							}
 						case "Mage":
@@ -115,13 +115,15 @@ class Battle {
 									damage = 5;
 								}
 							} else {
-								Sys.println("Not enough mana!");
+								Sys.println("\n### Not enough mana! ###\n");
 								continue;
 							}
 						case "Ranger":
 							// Doing ranger third ability if enough mana
-							if (player.getMana() >= 30) {} else {
+							if (player.getMana() >= 30) {
 								enemy.removeHealth(damage * 2);
+							} else {
+								Sys.println("\n### Not enough mana! ###\n");
 								continue;
 							}
 					}
@@ -216,7 +218,7 @@ class Battle {
 				if (user_option == "1" || user_option == "2" || user_option == "3") {
 					break;
 				} else {
-					Sys.println("Wrong input! Enter a number between 1 and 3!");
+					Sys.println("\n### Wrong input! Enter a number between 1 and 3! ###\n");
 				}
 			} while (true);
 
@@ -233,7 +235,7 @@ class Battle {
 								player.addHealth(20 * player.getLevel());
 								player.setMana(player.getMana() - 30);
 							} else {
-								Sys.println("Not enough mana!");
+								Sys.println("\n### Not enough mana! ###\n");
 								continue;
 							}
 						case "Mage":
@@ -242,7 +244,7 @@ class Battle {
 								player.addHealth(Std.int(startingHealth / 2));
 								player.setMana(player.getMana() - 100);
 							} else {
-								Sys.println("Not enough mana!");
+								Sys.println("\n### Not enough mana! ###\n");
 								continue;
 							}
 						case "Ranger":
@@ -256,7 +258,7 @@ class Battle {
 									damage = 5;
 								}
 							} else {
-								Sys.println("Not enough mana!");
+								Sys.println("\n### Not enough mana! ###\n");
 								continue;
 							}
 					}
@@ -268,7 +270,7 @@ class Battle {
 								player.addArmor(10 * player.getLevel());
 								player.setMana(player.getMana() - 40);
 							} else {
-								Sys.println("Not enough mana!");
+								Sys.println("\n### Not enough mana! ###\n");
 								continue;
 							}
 						case "Mage":
@@ -282,13 +284,15 @@ class Battle {
 									damage = 5;
 								}
 							} else {
-								Sys.println("Not enough mana!");
+								Sys.println("\n### Not enough mana! ###\n");
 								continue;
 							}
 						case "Ranger":
 							// Doing ranger third ability if enough mana
-							if (player.getMana() >= 30) {} else {
+							if (player.getMana() >= 30) {
 								boss.removeHealth(damage * 2);
+							} else {
+								Sys.println("\n### Not enough mana! ###\n");
 								continue;
 							}
 					}
