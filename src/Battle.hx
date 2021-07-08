@@ -1,23 +1,31 @@
 class Battle {
-	// First type of battle: user hero vs another hero
-	public static function OneVsOne(player:Hero, enemy:Hero):Void {
+	// Contsant variables used in the performing of the abilities(Stat boosts and mana costs of the abilities)
+	private static inline var MIN_PLAYER_DAMAGE = 5;
+	private static inline var MIN_BOSS_DAMAGE = 10;
+	private static inline var BASIC_ABILITY_MANA_COST = 0;
+	private static inline var WARRIOR_SECOND_ABILITY_MANA_COST = 30;
+	private static inline var WARRIOR_THIRD_ABILITY_MANA_COST = 40;
+	private static inline var MAGE_SECOND_ABILITY_MANA_COST = 100;
+	private static inline var MAGE_THIRD_ABILITY_MANA_COST = 40;
+	private static inline var RANGER_SECOND_ABILITY_MANA_COST = 40;
+	private static inline var RANGER_THIRD_ABILITY_MANA_COST = 30;
+	private static inline var HEALTH_BOOST = 20;
+	private static inline var ARMOR_BOOST = 10;
+	private static inline var DAMAGE_BOOST = 10;
+
+	public static function battle(player:Hero, enemy:Entity) {
 		// Prints the stats of the two heroes
 		Sys.println("\nStats:");
-		Sys.println(player.getName() + ": lv." + player.getLevel() + " Health: " + player.getHealth() + " (" + player.getDamage() + ", " + player.getMana()
-			+ ", " + player.getArmor() + ")");
-		Sys.println(enemy.getName() + ": lv." + enemy.getLevel() + " Health: " + enemy.getHealth() + " (" + enemy.getDamage() + ", " + enemy.getMana()
-			+ ", " + enemy.getArmor() + ")");
+		player.printStats();
+		enemy.printStats();
 
 		// Saves the initial stats of the user hero
 		var damage = player.getDamage() - enemy.getArmor();
-		var startingHealth = player.getHealth();
-		var startingDamage = player.getDamage();
-		var startingMana = player.getMana();
-		var startingArmor = player.getArmor();
+		var startingStats = [player.getHealth(), player.getDamage(), player.getMana(), player.getArmor()];
 
 		// Checks if the user hero damage is less than 5, if it is - sets it to 5
-		if (damage < 5) {
-			damage = 5;
+		if (damage < MIN_PLAYER_DAMAGE) {
+			damage = MIN_PLAYER_DAMAGE;
 		}
 
 		// Enters the battle
@@ -27,92 +35,90 @@ class Battle {
 			switch (Type.getClassName(Type.getClass(player))) {
 				// Abilities for warrior
 				case "Warrior":
-					Sys.println("1. Deal " + damage + " damage (0 mana)");
-					Sys.println("2. Increase health by 20 * level for the rest of the battle (30 mana)");
-					Sys.println("3. Increase armor by 10 * level for the rest of the battle (40 mana)");
+					Sys.println("1. Deal " + damage + " damage (" + BASIC_ABILITY_MANA_COST + " mana)");
+					Sys.println("2. Increase health by " + Std.string(HEALTH_BOOST) + " * level for the rest of the battle ("
+						+ Std.string(WARRIOR_SECOND_ABILITY_MANA_COST) + " mana)");
+					Sys.println("3. Increase armor by " + Std.string(ARMOR_BOOST) + " * level for the rest of the battle ("
+						+ Std.string(WARRIOR_THIRD_ABILITY_MANA_COST) + " mana)");
 				// Abilities for mage
 				case "Mage":
-					Sys.println("1. Deal " + damage + " damage (0 mana)");
-					Sys.println("2. Heal yourself for half of your health (100 mana)");
-					Sys.println("3. Incrase damage by 10 * level for the rest of the battle (40 mana)");
+					Sys.println("1. Deal " + damage + " damage (" + Std.string(BASIC_ABILITY_MANA_COST) + " mana)");
+					Sys.println("2. Heal yourself for half of your health (" + Std.string(MAGE_SECOND_ABILITY_MANA_COST) + " mana)");
+					Sys.println("3. Incrase damage by " + Std.string(DAMAGE_BOOST) + " * level for the rest of the battle ("
+						+ Std.string(MAGE_THIRD_ABILITY_MANA_COST) + "40 mana)");
 				// Abilities for ranger
 				case "Ranger":
-					Sys.println("1. Deal " + damage + " damage (0 mana)");
-					Sys.println("2. Incrase damage by 10 * level for the rest of the battle (40 mana)");
-					Sys.println("3. Massive strike: " + (damage * 2) + " damage (30 mana)");
+					Sys.println("1. Deal " + damage + " damage (" + Std.string(BASIC_ABILITY_MANA_COST) + " mana)");
+					Sys.println("2. Incrase damage by " + Std.string(DAMAGE_BOOST) + " * level for the rest of the battle ("
+						+ Std.string(RANGER_SECOND_ABILITY_MANA_COST) + " mana)");
+					Sys.println("3. Massive strike: " + (damage * 2) + " damage (" + Std.string(RANGER_THIRD_ABILITY_MANA_COST) + " mana)");
 			}
 
 			// Checks if user input is valid
-			var user_option;
-			do {
-				user_option = Sys.stdin().readLine();
-				if (user_option == "1" || user_option == "2" || user_option == "3") {
-					break;
-				} else {
-					Sys.println("\n### Wrong input! Enter a number between 1 and 3! ###\n");
-				}
-			} while (true);
+			// Checks user input if valid
+			var numberOfPossibleOptions = 3;
+			var userOption = InputValidation.checkMenuInput(numberOfPossibleOptions);
 
-				// Process user input
-			switch (user_option) {
-				case "1":
+			// Process user input
+			switch (userOption) {
+				case 1:
 					// Doing every classs first ability
 					enemy.removeHealth(damage);
-				case "2":
+				case 2:
 					switch (Type.getClassName(Type.getClass(player))) {
 						case "Warrior":
 							// Doing warrior second ability if enough mana
-							if (player.getMana() >= 30) {
-								player.addHealth(20 * player.getLevel());
-								player.setMana(player.getMana() - 30);
+							if (player.getMana() >= WARRIOR_SECOND_ABILITY_MANA_COST) {
+								player.addHealth(HEALTH_BOOST * player.getLevel());
+								player.setMana(player.getMana() - WARRIOR_SECOND_ABILITY_MANA_COST);
 							} else {
 								Sys.println("\n### Not enough mana! ###\n");
 								continue;
 							}
 						case "Mage":
 							// Doing mage second ability if enough mana
-							if (player.getMana() >= 100) {
-								player.addHealth(Std.int(startingHealth / 2));
-								player.setMana(player.getMana() - 100);
+							if (player.getMana() >= MAGE_SECOND_ABILITY_MANA_COST) {
+								player.addHealth(Std.int(startingStats[0] / 2));
+								player.setMana(player.getMana() - MAGE_SECOND_ABILITY_MANA_COST);
 							} else {
 								Sys.println("\n### Not enough mana! ###\n");
 								continue;
 							}
 						case "Ranger":
 							// Doing ranger second ability if enough mana
-							if (player.getMana() >= 40) {
-								player.addDamage(10 * player.getLevel());
-								player.setMana(player.getMana() - 40);
+							if (player.getMana() >= RANGER_SECOND_ABILITY_MANA_COST) {
+								player.addDamage(DAMAGE_BOOST * player.getLevel());
+								player.setMana(player.getMana() - RANGER_SECOND_ABILITY_MANA_COST);
 								damage = player.getDamage() - enemy.getArmor();
 								// Checks if the user hero damage is less than 5, if it is - sets it to 5
-								if (damage < 5) {
-									damage = 5;
+								if (damage < MIN_PLAYER_DAMAGE) {
+									damage = MIN_PLAYER_DAMAGE;
 								}
 							} else {
 								Sys.println("\n### Not enough mana! ###\n");
 								continue;
 							}
 					}
-				case "3":
+				case 3:
 					switch (Type.getClassName(Type.getClass(player))) {
 						case "Warrior":
 							// Doing warrior third ability if enough mana
-							if (player.getMana() >= 40) {
-								player.addArmor(10 * player.getLevel());
-								player.setMana(player.getMana() - 40);
+							if (player.getMana() >= WARRIOR_THIRD_ABILITY_MANA_COST) {
+								player.addArmor(ARMOR_BOOST * player.getLevel());
+								player.setMana(player.getMana() - WARRIOR_THIRD_ABILITY_MANA_COST);
 							} else {
 								Sys.println("\n### Not enough mana! ###\n");
 								continue;
 							}
 						case "Mage":
 							// Doing mage third ability if enough mana
-							if (player.getMana() >= 40) {
-								player.addDamage(10 * player.getLevel());
-								player.setMana(player.getMana() - 40);
+							if (player.getMana() >= MAGE_THIRD_ABILITY_MANA_COST) {
+								player.addDamage(DAMAGE_BOOST * player.getLevel());
+								player.setMana(player.getMana() - MAGE_THIRD_ABILITY_MANA_COST);
 								damage = player.getDamage() - enemy.getArmor();
 								// Checks if the user hero damage is less than 5, if it is - sets it to 5
-								if (damage < 5) {
-									damage = 5;
+								if (damage < MIN_PLAYER_DAMAGE) {
+									damage = MIN_PLAYER_DAMAGE;
 								}
 							} else {
 								Sys.println("\n### Not enough mana! ###\n");
@@ -120,8 +126,9 @@ class Battle {
 							}
 						case "Ranger":
 							// Doing ranger third ability if enough mana
-							if (player.getMana() >= 30) {
+							if (player.getMana() >= RANGER_THIRD_ABILITY_MANA_COST) {
 								enemy.removeHealth(damage * 2);
+								player.setMana(player.getMana() - RANGER_THIRD_ABILITY_MANA_COST);
 							} else {
 								Sys.println("\n### Not enough mana! ###\n");
 								continue;
@@ -131,215 +138,41 @@ class Battle {
 
 			// Prints the stats again after the user has performed an ability
 			Sys.println("\nAfter your turn:");
-			Sys.println(player.getName() + ": lv." + player.getLevel() + " Health: " + player.getHealth() + " (" + player.getDamage() + ", "
-				+ player.getMana() + ", " + player.getArmor() + ")");
-			Sys.println(enemy.getName() + ": lv." + enemy.getLevel() + " Health: " + enemy.getHealth() + " (" + enemy.getDamage() + ", " + enemy.getMana()
-				+ ", " + enemy.getArmor() + ")");
+			player.printStats();
+			enemy.printStats();
 
 			// Checks if enemy is alive, if it not - ends tha battle
 			if (!enemy.isAlive()) {
 				Sys.println("Victory!");
-				player.setHealth(startingHealth);
-				player.setDamage(startingDamage);
-				player.setMana(startingMana);
-				player.setArmor(startingArmor);
+				player.setStats(player.getGold(), player.getLevel(), startingStats[0], startingStats[1], startingStats[2], startingStats[3]);
 				player.addGold(10 * enemy.getLevel());
+				if (Type.getClassName(Type.getClass(enemy)) == "Boss") {
+					player.setXpNeeded(player.getXpNeeded() - 1);
+					if (player.getXpNeeded() == 0) {
+						player.levelUp();
+					}
+				}
 				break;
 			}
 			// Enemy attack
 			var enemyDamage = enemy.getDamage() - player.getArmor();
-			if (enemyDamage < 5) {
-				enemyDamage = 5;
+			if (enemyDamage < MIN_BOSS_DAMAGE && Type.getClassName(Type.getClass(enemy)) == "Boss") {
+				enemyDamage = MIN_BOSS_DAMAGE;
+			} else if (enemyDamage < MIN_PLAYER_DAMAGE) {
+				enemyDamage = MIN_PLAYER_DAMAGE;
 			}
+
 			player.removeHealth(enemyDamage);
 
 			// Prints stats after the enemy attack
 			Sys.println("\nAfter enemy turn:");
-			Sys.println(player.getName() + ": lv." + player.getLevel() + " Health: " + player.getHealth() + " (" + player.getDamage() + ", "
-				+ player.getMana() + ", " + player.getArmor() + ")");
-			Sys.println(enemy.getName() + ": lv." + enemy.getLevel() + " Health: " + enemy.getHealth() + " (" + enemy.getDamage() + ", " + enemy.getMana()
-				+ ", " + enemy.getArmor() + ")");
+			player.printStats();
+			enemy.printStats();
 
 			// Checks if the user hero is alive, if it is not - ends the battle
 			if (!player.isAlive()) {
+				player.setStats(player.getGold(), player.getLevel(), startingStats[0], startingStats[1], startingStats[2], startingStats[3]);
 				Sys.println("Defeat!");
-				player.setHealth(startingHealth);
-				player.setDamage(startingDamage);
-				player.setMana(startingMana);
-				player.setArmor(startingArmor);
-				break;
-			}
-		}
-	}
-
-	// Second type of battle - user hero vs a boss
-	public static function OneVsBoss(player:Hero, boss:Boss):Void {
-		// Prints the stats of the user hero and the boss
-		Sys.println("\nStats:");
-		Sys.println(player.getName() + ": lv." + player.getLevel() + " Health: " + player.getHealth() + " (" + player.getDamage() + ", " + player.getMana()
-			+ ", " + player.getArmor() + ")");
-		Sys.println("Boss: lv." + boss.getLevel() + " Health: " + boss.getHealth() + " (" + boss.getDamage() + ", " + boss.getArmor() + ")");
-
-		// Saves the initial stat of the user hero
-		var damage = player.getDamage() - boss.getArmor();
-		var startingHealth = player.getHealth();
-		var startingDamage = player.getDamage();
-		var startingMana = player.getMana();
-		var startingArmor = player.getArmor();
-		if (damage < 5) {
-			damage = 5;
-		}
-		// Enters the battle
-		while (true) {
-			// Asks the user to choose from one of his abilities corresponding to its class
-			Sys.println("Choose an ability:");
-			switch (Type.getClassName(Type.getClass(player))) {
-				// Abilities for warrior
-				case "Warrior":
-					Sys.println("1. Deal " + damage + " damage (0 mana)");
-					Sys.println("2. Increase health by 20 * level for the rest of the battle (30 mana)");
-					Sys.println("3. Increase armor by 10 * level for the rest of the battle (40 mana)");
-				// Abilities for mage
-				case "Mage":
-					Sys.println("1. Deal " + damage + " damage (0 mana)");
-					Sys.println("2. Heal yourself for half of your health (100 mana)");
-					Sys.println("3. Incrase damage by 10 * level for the rest of the battle (40 mana)");
-				// Abilities for ranger
-				case "Ranger":
-					Sys.println("1. Deal " + damage + " damage (0 mana)");
-					Sys.println("2. Incrase damage by 10 * level for the rest of the battle (40 mana)");
-					Sys.println("3. Massive strike: " + (damage * 2) + " damage (30 mana)");
-			}
-
-			// checks if the user input is valid
-			var user_option;
-			do {
-				user_option = Sys.stdin().readLine();
-				if (user_option == "1" || user_option == "2" || user_option == "3") {
-					break;
-				} else {
-					Sys.println("\n### Wrong input! Enter a number between 1 and 3! ###\n");
-				}
-			} while (true);
-
-				// Process user input
-			switch (user_option) {
-				case "1":
-					// Doing every classs first ability
-					boss.removeHealth(damage);
-				case "2":
-					switch (Type.getClassName(Type.getClass(player))) {
-						case "Warrior":
-							// Doing warrior second ability if enough mana
-							if (player.getMana() >= 30) {
-								player.addHealth(20 * player.getLevel());
-								player.setMana(player.getMana() - 30);
-							} else {
-								Sys.println("\n### Not enough mana! ###\n");
-								continue;
-							}
-						case "Mage":
-							// Doing mage second ability if enough mana
-							if (player.getMana() >= 100) {
-								player.addHealth(Std.int(startingHealth / 2));
-								player.setMana(player.getMana() - 100);
-							} else {
-								Sys.println("\n### Not enough mana! ###\n");
-								continue;
-							}
-						case "Ranger":
-							// Doing ranger second ability if enough mana
-							if (player.getMana() >= 40) {
-								player.addDamage(10 * player.getLevel());
-								player.setMana(player.getMana() - 40);
-								damage = player.getDamage() - boss.getArmor();
-								// Checks if the user hero damage is less than 5, if it is - sets it to 5
-								if (damage < 5) {
-									damage = 5;
-								}
-							} else {
-								Sys.println("\n### Not enough mana! ###\n");
-								continue;
-							}
-					}
-				case "3":
-					switch (Type.getClassName(Type.getClass(player))) {
-						case "Warrior":
-							// Doing warrior third ability if enough mana
-							if (player.getMana() >= 40) {
-								player.addArmor(10 * player.getLevel());
-								player.setMana(player.getMana() - 40);
-							} else {
-								Sys.println("\n### Not enough mana! ###\n");
-								continue;
-							}
-						case "Mage":
-							// Doing mage third ability if enough mana
-							if (player.getMana() >= 40) {
-								player.addDamage(10 * player.getLevel());
-								player.setMana(player.getMana() - 40);
-								damage = player.getDamage() - boss.getArmor();
-								// Checks if the user hero damage is less than 5, if it is - sets it to 5
-								if (damage < 5) {
-									damage = 5;
-								}
-							} else {
-								Sys.println("\n### Not enough mana! ###\n");
-								continue;
-							}
-						case "Ranger":
-							// Doing ranger third ability if enough mana
-							if (player.getMana() >= 30) {
-								boss.removeHealth(damage * 2);
-							} else {
-								Sys.println("\n### Not enough mana! ###\n");
-								continue;
-							}
-					}
-			}
-
-			// Prints the stats after the user hero has performed an ability
-			Sys.println("\nAfter your turn:");
-			Sys.println(player.getName() + ": lv." + player.getLevel() + " Health: " + player.getHealth() + " (" + player.getDamage() + ", "
-				+ player.getMana() + ", " + player.getArmor() + ")");
-			Sys.println("Boss: lv." + boss.getLevel() + " Health: " + boss.getHealth() + " (" + boss.getDamage() + ", " + boss.getArmor() + ")");
-
-			// Chekcs if the boss is alive, if it is not gives xp and gold to the user and exits the battle
-			if (!boss.isAlive()) {
-				Sys.println("Victory!");
-				player.setHealth(startingHealth);
-				player.setDamage(startingDamage);
-				player.setMana(startingMana);
-				player.setArmor(startingArmor);
-				player.addGold(5 * boss.getLevel());
-				player.setXpNeeded(player.getXpNeeded() - 1);
-				if (player.getXpNeeded() == 0) {
-					player.levelUp();
-				}
-
-				break;
-			}
-
-			// Perforems the attack of the boss
-			var bossDamage = boss.getDamage() - player.getArmor();
-			if (bossDamage < 10) {
-				bossDamage = 10;
-			}
-			player.removeHealth(bossDamage);
-
-			// Prints the stats after the boss attack
-			Sys.println("\nAfter enemy turn:");
-			Sys.println(player.getName() + ": lv." + player.getLevel() + " Health: " + player.getHealth() + " (" + player.getDamage() + ", "
-				+ player.getMana() + ", " + player.getArmor() + ")");
-			Sys.println("Boss: lv." + boss.getLevel() + " Health: " + boss.getHealth() + " (" + boss.getDamage() + ", " + boss.getArmor() + ")");
-
-			// Checks if the user is alive, if it is not - exits the battle
-			if (!player.isAlive()) {
-				Sys.println("Defeat!");
-				player.setHealth(startingHealth);
-				player.setDamage(startingDamage);
-				player.setMana(startingMana);
-				player.setArmor(startingArmor);
 				break;
 			}
 		}

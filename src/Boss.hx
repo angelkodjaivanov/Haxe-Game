@@ -1,5 +1,5 @@
 // The Boss class
-class Boss {
+class Boss implements Entity {
 	private var health:Int;
 	private var damage:Int;
 	private var armor:Int;
@@ -19,7 +19,7 @@ class Boss {
 	}
 
 	// Removes health from the boss
-	public function removeHealth(removeHealth) {
+	public function removeHealth(removeHealth:Int) {
 		this.health = this.health - removeHealth;
 	}
 
@@ -41,5 +41,10 @@ class Boss {
 	// Checks if the boss is alive
 	public function isAlive():Bool {
 		return this.health > 0;
+	}
+
+	// Prints all the stats of the boss
+	public function printStats():Void {
+		Sys.println("Boss: lv." + this.level + " Health: " + this.health + " (" + this.damage + ", " + this.armor + ")");
 	}
 }

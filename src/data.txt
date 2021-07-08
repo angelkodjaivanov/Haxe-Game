@@ -1,1 +1,1 @@
-Susime 10 2 135 35 55 40 Warrior|||Bezime 57 3 120 65 60 25 Ranger|||
+Susime 40 2 135 35 55 40 Warrior|||Bezime 80 4 190 90 65 60 Ranger|||James 10 2 110 45 55 20 Ranger|||Benjamin 30 3 120 35 90 18 Mage|||Janice 0 1 100 30 50 20 Warrior|||

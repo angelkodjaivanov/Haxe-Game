@@ -10,7 +10,7 @@ class Item {
 	private var price:Int;
 
 	// Constructor
-	public function new(name, type, addHealth, addDamage, addMana, addArmor, price) {
+	public function new(name:String, type:String, addHealth:Int, addDamage:Int, addMana:Int, addArmor:Int, price:Int) {
 		this.name = name;
 		this.type = type;
 		this.addHealth = addHealth;

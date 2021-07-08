@@ -1,5 +1,5 @@
-// The Hero class
-class Hero {
+// The Hero class, implements Entity
+class Hero implements Entity {
 	private var name:String;
 	private var health:Int;
 	private var damage:Int;
@@ -10,7 +10,7 @@ class Hero {
 	private var xpNeeded:Int;
 
 	// Creates new Hero with stats that are based on the subclass
-	public function new(name, health, damage, mana, armor) {
+	public function new(name:String, health:Int, damage:Int, mana:Int, armor:Int) {
 		this.name = name;
 		this.health = health;
 		this.damage = damage;
@@ -27,7 +27,7 @@ class Hero {
 	}
 
 	// Sets the name of the hero
-	public function setName(name):Void {
+	public function setName(name:String):Void {
 		this.name = name;
 	}
 
@@ -37,17 +37,17 @@ class Hero {
 	}
 
 	// Sets the health of the hero
-	public function setHealth(health):Void {
+	public function setHealth(health:Int):Void {
 		this.health = health;
 	}
 
 	// Add health to the current health of the hero
-	public function addHealth(addHealth):Void {
+	public function addHealth(addHealth:Int):Void {
 		this.health = this.health + addHealth;
 	}
 
 	// Removes health from the hero
-	public function removeHealth(removeHealth):Void {
+	public function removeHealth(removeHealth:Int):Void {
 		this.health = this.health - removeHealth;
 	}
 
@@ -57,12 +57,12 @@ class Hero {
 	}
 
 	// Sets the damage of the hero
-	public function setDamage(damage):Void {
+	public function setDamage(damage:Int):Void {
 		this.damage = damage;
 	}
 
 	// Adds damage to the current damage of the hero
-	public function addDamage(addDamage):Void {
+	public function addDamage(addDamage:Int):Void {
 		this.damage = this.damage + addDamage;
 	}
 
@@ -72,17 +72,17 @@ class Hero {
 	}
 
 	// Sets the mana of the hero
-	public function setMana(mana):Void {
+	public function setMana(mana:Int):Void {
 		this.mana = mana;
 	}
 
 	// Adds mana to the current mana of the hero
-	public function addMana(addMana):Void {
+	public function addMana(addMana:Int):Void {
 		this.mana = this.mana + addMana;
 	}
 
 	// Removes mana from the hero
-	public function removeMana(removeMana):Void {
+	public function removeMana(removeMana:Int):Void {
 		this.mana = this.mana - removeMana;
 	}
 
@@ -92,12 +92,12 @@ class Hero {
 	}
 
 	// Sets the armor of the hero
-	public function setArmor(armor):Void {
+	public function setArmor(armor:Int):Void {
 		this.armor = armor;
 	}
 
 	// Adds armor to the current armor of the hero
-	public function addArmor(addArmor):Void {
+	public function addArmor(addArmor:Int):Void {
 		this.armor = this.armor + addArmor;
 	}
 
@@ -117,12 +117,12 @@ class Hero {
 	}
 
 	// Adds gold to the current amount
-	public function addGold(addGold):Void {
+	public function addGold(addGold:Int):Void {
 		this.gold += addGold;
 	}
 
 	// Sets the gold of the hero
-	public function setGold(gold):Void {
+	public function setGold(gold:Int):Void {
 		this.gold = gold;
 	}
 
@@ -133,7 +133,7 @@ class Hero {
 	}
 
 	// Sets the level of the hero
-	public function setLevel(level):Void {
+	public function setLevel(level:Int):Void {
 		this.level = level;
 	}
 
@@ -143,7 +143,66 @@ class Hero {
 	}
 
 	// Sets the xp needed for the next level
-	public function setXpNeeded(xpNeeded):Void {
+	public function setXpNeeded(xpNeeded:Int):Void {
 		this.xpNeeded = xpNeeded;
+	}
+
+	// Prints all the stats of the entity
+	public function printStats():Void {
+		Sys.println(this.name + ": lv." + Std.string(this.level) + " Health: " + Std.string(this.health) + " (" + Std.string(this.damage) + ", "
+			+ Std.string(this.mana) + ", " + Std.string(this.armor) + ")");
+	}
+
+	// Gets the information that will be used for saving the hero
+	public function getSaveHeroInfo():String {
+		return Std.string(this.getName()) + " " + Std.string(this.gold) + " " + Std.string(this.level) + " " + Std.string(this.health) + " "
+			+ Std.string(this.damage) + " " + Std.string(this.mana) + " " + Std.string(this.armor) + " " + Type.getClassName(Type.getClass(this));
+	}
+
+	// Saves the hero in the datafile
+	public function saveHero():Void {
+		var characters = sys.io.File.getContent('data.txt').split("|||");
+		characters.pop();
+		var index = 0;
+
+		// Checks if hero exists and if it does overwrites the information
+		var hero_exists = false;
+		while (index < characters.length) {
+			var character = characters[index].split(" ");
+			if (this.getName() == character[0]) {
+				hero_exists = true;
+				characters[index] = this.getSaveHeroInfo();
+				break;
+			}
+			index += 1;
+		}
+
+		// If hero doesn't exist it appends the new one at the end of the file
+		if (!hero_exists) {
+			var heroSave = this.getSaveHeroInfo() + "|||";
+			var output = sys.io.File.append('data.txt', false);
+			output.writeString(heroSave);
+			output.close();
+			// If hero exists, stores the new information about the hero
+		} else {
+			var content:String = "";
+			index = 0;
+			while (index < characters.length) {
+				content += (characters[index] + "|||");
+				index += 1;
+			}
+			sys.io.File.saveContent('data.txt', content);
+		}
+		Sys.println("Hero saved!");
+	}
+
+	// Sets all the stats of the hero
+	public function setStats(gold:Int, level:Int, health:Int, damage:Int, mana:Int, armor:Int):Void {
+		this.gold = gold;
+		this.level = level;
+		this.health = health;
+		this.damage = damage;
+		this.mana = mana;
+		this.armor = armor;
 	}
 }
